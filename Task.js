@@ -1,11 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
-import { ThemeContext } from './ThemeContext';
 
 const Task = ({ task, onIncrement, onUpdateText, onReset, onDelete }) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(task.text);
-  const { theme } = useContext(ThemeContext);
 
   const handleIncrement = () => {
     setEditing(false);
@@ -31,10 +29,10 @@ const Task = ({ task, onIncrement, onUpdateText, onReset, onDelete }) => {
   };
 
   return (
-    <View style={[styles.taskContainer, theme.container]}>
+    <View style={styles.taskContainer}>
       {editing ? (
         <TextInput
-          style={[styles.taskTextInput, { color: theme.text.color, borderColor: theme.text.color }]}
+          style={styles.taskTextInput}
           value={text}
           onChangeText={setText}
           onBlur={handleTextUpdate}
@@ -46,11 +44,11 @@ const Task = ({ task, onIncrement, onUpdateText, onReset, onDelete }) => {
           onPress={() => setEditing(true)}
           onLongPress={handleLongPress}
         >
-          <Text style={[styles.taskText, theme.text]}>{text}</Text>
+          <Text style={styles.taskText}>{text}</Text>
         </TouchableOpacity>
       )}
       <View style={styles.counterContainer}>
-        <Text style={[styles.counterText, theme.text]}>{task.count}</Text>
+        <Text style={styles.counterText}>{task.count}</Text>
         <TouchableOpacity style={styles.tickButton} onPress={handleIncrement}>
           <Text style={styles.tickButtonText}>✓</Text>
         </TouchableOpacity>
@@ -65,6 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
+    backgroundColor: "#f2f2f2",
     marginVertical: 5,
     borderRadius: 5
   },
@@ -93,12 +92,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 5,
     borderWidth: 1,
+    borderColor: 'gray',
     borderRadius: 5,
   },
   taskTextContainer: {
     flex: 1,
     justifyContent: 'center',
   },
-});
+})
 
-export default Task;
+export default Task

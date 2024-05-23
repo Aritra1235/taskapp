@@ -40,17 +40,23 @@ const MainScreen = ({ navigation }) => {
       return;
     }
 
-    const newTask = { id: Date.now(), text: newTaskText, count: 0 };
+    const newTask = { id: Date.now(), text: newTaskText, count: 0, lastIncrementDate: null };
     setTasks([...tasks, newTask]);
     saveTasksToStorage([...tasks, newTask]);
     setNewTaskText('');
     setIsAddingTask(false);
   };
 
-  const incrementTaskCount = (taskId, updatedCount) => {
+  const incrementTaskCount = (taskId) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
-        return { ...task, count: updatedCount };
+        const today = new Date().toISOString().split('T')[0];
+        if (task.lastIncrementDate === today) {
+          Alert.alert('Notice', 'You can only increment this task once per day');
+          return task;
+        } else {
+          return { ...task, count: task.count + 1, lastIncrementDate: today };
+        }
       }
       return task;
     });
@@ -89,6 +95,13 @@ const MainScreen = ({ navigation }) => {
   return (
     <View style={[styles.container, theme.container]}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Settings')}>
+        <Ionicons
+          name="settings-outline"
+          size={24}
+          color={isDarkMode ? '#ffffff' : '#000000'}
+        />
+      </TouchableOpacity>
       {isAddingTask ? (
         <View style={styles.addTaskContainer}>
           <TextInput
@@ -128,7 +141,7 @@ const MainScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 20
   },
   addButton: {
     backgroundColor: "blue",
@@ -140,7 +153,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 20
   },
   addTaskContainer: {
     flexDirection: 'row',
@@ -152,11 +165,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 5,
     borderWidth: 1,
+    borderColor: 'gray',
     borderRadius: 5,
     marginRight: 10,
   },
   settingsButton: {
     marginLeft: 10,
+    alignSelf: 'flex-start',
   },
 });
 
