@@ -1,20 +1,20 @@
 import React, { useContext } from 'react';
-import { View, Switch, StyleSheet, Text } from 'react-native'; // Make sure Text is imported
+import { View, Switch, StyleSheet, Text } from 'react-native'; 
 import { ThemeContext } from './ThemeContext';
 
 const SettingsScreen = () => {
-  const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { isDarkMode, toggleDarkMode, theme } = useContext(ThemeContext);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, theme.container]}>
       <View style={styles.settingRow}>
         <Switch
           value={isDarkMode}
           onValueChange={toggleDarkMode}
           thumbColor={isDarkMode ? '#ffffff' : '#000000'}
-          trackColor={{ true: '#000000', false: '#d3d3d3' }}
+          trackColor={{ true: '#34c659', false: '#d3d3d3' }}
         />
-        <Text style={styles.settingLabel}>Dark Mode</Text>
+        <Text style={[styles.settingLabel, theme.text]}>Dark Mode</Text>
       </View>
     </View>
   );
@@ -23,7 +23,6 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     padding: 20,
   },
   settingRow: {

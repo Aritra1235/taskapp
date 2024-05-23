@@ -19,24 +19,30 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-const lightTheme = StyleSheet.create({
+const lightTheme = {
   container: {
-    flex: 1,
     backgroundColor: '#ffffff',
-    color: '#000000'
   },
   text: {
     color: '#000000'
-  }
-});
+  },
+  navigation: {
+    backgroundColor: '#ffffff',
+    headerTintColor: '#000000',
+    headerTitleColor: '#000000',
+  },
+};
 
-const darkTheme = StyleSheet.create({
+const darkTheme = {
   container: {
-    flex: 1,
     backgroundColor: '#000000',
-    color: '#ffffff'
   },
   text: {
     color: '#ffffff'
-  }
-});
+  },
+  navigation: {
+    backgroundColor: '#000000',
+    headerTintColor: '#ffffff',
+    headerTitleColor: '#ffffff',
+  },
+};
