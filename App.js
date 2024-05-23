@@ -1,35 +1,77 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Task from './components/Task';
+import SettingsScreen from './components/SettingsScreen';
+import { ThemeContext, ThemeProvider } from './components/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+
+const Stack = createStackNavigator();
 
 const App = () => {
+  return (
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Main"
+            component={MainScreen}
+            options={({ navigation }) => ({
+              headerLeft: () => <SettingsButton navigation={navigation} />
+            })}
+          />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
+  );
+};
+
+const SettingsButton = ({ navigation }) => {
+  const { isDarkMode } = useContext(ThemeContext);
+  return (
+    <TouchableOpacity
+      style={styles.settingsButton}
+      onPress={() => navigation.navigate('Settings')}
+    >
+      <Ionicons
+        name="settings-outline"
+        size={24}
+        color={isDarkMode ? '#ffffff' : '#000000'}
+      />
+    </TouchableOpacity>
+  );
+};
+
+const MainScreen = () => {
   const [tasks, setTasks] = useState([]);
   const [newTaskText, setNewTaskText] = useState('');
   const [isAddingTask, setIsAddingTask] = useState(false);
 
   useEffect(() => {
-    loadTasks()
-  }, [])
+    loadTasks();
+  }, []);
 
   const loadTasks = async () => {
     try {
-      const tasksData = await AsyncStorage.getItem("tasks")
+      const tasksData = await AsyncStorage.getItem("tasks");
       if (tasksData) {
-        setTasks(JSON.parse(tasksData))
+        setTasks(JSON.parse(tasksData));
       }
     } catch (error) {
-      console.log("Error loading tasks:", error)
+      console.log("Error loading tasks:", error);
     }
-  }
+  };
 
-  const saveTasksToStorage = async updatedTasks => {
+  const saveTasksToStorage = async (updatedTasks) => {
     try {
-      await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks))
+      await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
     } catch (error) {
-      console.log("Error saving tasks:", error)
+      console.log("Error saving tasks:", error);
     }
-  }
+  };
 
   const addTask = () => {
     if (newTaskText.trim() === '') {
@@ -85,47 +127,46 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        {isAddingTask ? (
-          <View style={styles.addTaskContainer}>
-            <TextInput
-              style={styles.addTaskInput}
-              value={newTaskText}
-              onChangeText={setNewTaskText}
-              placeholder="Enter task name"
-              autoFocus
-            />
-            <TouchableOpacity style={styles.addButton} onPress={addTask}>
-              <Text style={styles.addButtonText}>Add</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <TouchableOpacity style={styles.addButton} onPress={() => setIsAddingTask(true)}>
-            <Text style={styles.addButtonText}>+</Text>
+      <StatusBar barStyle="dark-content" />
+      {isAddingTask ? (
+        <View style={styles.addTaskContainer}>
+          <TextInput
+            style={styles.addTaskInput}
+            value={newTaskText}
+            onChangeText={setNewTaskText}
+            placeholder="Enter task name"
+            autoFocus
+          />
+          <TouchableOpacity style={styles.addButton} onPress={addTask}>
+            <Text style={styles.addButtonText}>Add</Text>
           </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity style={styles.addButton} onPress={() => setIsAddingTask(true)}>
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
+      )}
+      <FlatList
+        data={tasks}
+        renderItem={({ item }) => (
+          <Task
+            task={item}
+            onIncrement={incrementTaskCount}
+            onUpdateText={updateTaskText}
+            onReset={resetTaskCount}
+            onDelete={deleteTask}
+          />
         )}
-        <FlatList
-          data={tasks}
-          renderItem={({ item }) => (
-            <Task
-              task={item}
-              onIncrement={incrementTaskCount}
-              onUpdateText={updateTaskText}
-              onReset={resetTaskCount}
-              onDelete={deleteTask}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
+        keyExtractor={(item) => item.id.toString()}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  // Add styles here
   container: {
     flex: 1,
-    padding: 20
+    padding: 20,
   },
   addButton: {
     backgroundColor: "blue",
@@ -137,7 +178,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: "white",
-    fontSize: 20
+    fontSize: 20,
   },
   addTaskContainer: {
     flexDirection: 'row',
@@ -153,6 +194,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight: 10,
   },
-})
+  settingsButton: {
+    marginLeft: 10,
+  },
+});
 
-export default App
+export default App;
