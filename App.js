@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert } from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import Task from "./components/Task"
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Task from './components/Task';
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
@@ -66,34 +66,61 @@ const App = () => {
     saveTasksToStorage(updatedTasks);
   };
 
+  const resetTaskCount = (taskId) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        return { ...task, count: 0 };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+    saveTasksToStorage(updatedTasks);
+  };
+
+  const deleteTask = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+    saveTasksToStorage(updatedTasks);
+  };
+
   return (
     <View style={styles.container}>
-      {isAddingTask ? (
-        <View style={styles.addTaskContainer}>
-          <TextInput
-            style={styles.addTaskInput}
-            value={newTaskText}
-            onChangeText={setNewTaskText}
-            placeholder="Enter task name"
-            autoFocus
-          />
-          <TouchableOpacity style={styles.addButton} onPress={addTask}>
-            <Text style={styles.addButtonText}>Add</Text>
+        <StatusBar barStyle="dark-content" />
+        {isAddingTask ? (
+          <View style={styles.addTaskContainer}>
+            <TextInput
+              style={styles.addTaskInput}
+              value={newTaskText}
+              onChangeText={setNewTaskText}
+              placeholder="Enter task name"
+              autoFocus
+            />
+            <TouchableOpacity style={styles.addButton} onPress={addTask}>
+              <Text style={styles.addButtonText}>Add</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.addButton} onPress={() => setIsAddingTask(true)}>
+            <Text style={styles.addButtonText}>+</Text>
           </TouchableOpacity>
-        </View>
-      ) : (
-        <TouchableOpacity style={styles.addButton} onPress={() => setIsAddingTask(true)}>
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-      )}
-      <FlatList
-        data={tasks}
-        renderItem={({ item }) => <Task task={item} onIncrement={incrementTaskCount} onUpdateText={updateTaskText} />}
-        keyExtractor={(item) => item.id.toString()}
-      />
+        )}
+        <FlatList
+          data={tasks}
+          renderItem={({ item }) => (
+            <Task
+              task={item}
+              onIncrement={incrementTaskCount}
+              onUpdateText={updateTaskText}
+              onReset={resetTaskCount}
+              onDelete={deleteTask}
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   // Add styles here
   container: {

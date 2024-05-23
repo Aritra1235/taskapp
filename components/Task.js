@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
 
-const Task = ({ task, onIncrement, onUpdateText }) => {
+const Task = ({ task, onIncrement, onUpdateText, onReset, onDelete }) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(task.text);
 
@@ -13,6 +13,19 @@ const Task = ({ task, onIncrement, onUpdateText }) => {
   const handleTextUpdate = () => {
     setEditing(false);
     onUpdateText(task.id, text);
+  };
+
+  const handleLongPress = () => {
+    Alert.alert(
+      'Task Options',
+      'Choose an option',
+      [
+        { text: 'Reset', onPress: () => onReset(task.id) },
+        { text: 'Delete', onPress: () => onDelete(task.id), style: 'destructive' },
+        { text: 'Cancel', style: 'cancel' },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -29,7 +42,7 @@ const Task = ({ task, onIncrement, onUpdateText }) => {
         <TouchableOpacity
           style={styles.taskTextContainer}
           onPress={() => setEditing(true)}
-          onLongPress={() => setEditing(true)}
+          onLongPress={handleLongPress}
         >
           <Text style={styles.taskText}>{text}</Text>
         </TouchableOpacity>
