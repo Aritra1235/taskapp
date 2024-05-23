@@ -131,23 +131,21 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   addButton: {
-    backgroundColor: "#34c659",
-    borderRadius: 100,
-    alignSelf: 'flex-end',
-    width: 30,
-    height: 30, // Add this line to ensure a circular shape
-    justifyContent: 'center', // Center the content vertically
-    alignItems: 'center', // Center the content horizontally
-
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: "flex-end",
+    marginBottom: 10,
+    marginTop: 20,
   },
   addButtonText: {
-    color: 'black',
-    fontSize: 25,
+    color: "white",
+    fontSize: 20,
   },
   addTaskContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-
+    marginBottom: 10,
   },
   addTaskInput: {
     flex: 1,

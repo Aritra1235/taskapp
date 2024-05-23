@@ -27,7 +27,7 @@ const App = () => {
               }}
             >
               <Stack.Screen
-                name="Tasks"
+                name="Main"
                 component={MainScreen}
                 options={({ navigation }) => ({
                   headerLeft: () => (
