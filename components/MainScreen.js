@@ -95,13 +95,6 @@ const MainScreen = ({ navigation }) => {
   return (
     <View style={[styles.container, theme.container]}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Settings')}>
-        <Ionicons
-          name="settings-outline"
-          size={24}
-          color={isDarkMode ? '#ffffff' : '#000000'}
-        />
-      </TouchableOpacity>
       {isAddingTask ? (
         <View style={styles.addTaskContainer}>
           <TextInput
@@ -150,6 +143,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginBottom: 10,
     marginTop: 20,
+    alignSelf: "center", // Align the button to the center horizontally
   },
   addButtonText: {
     color: "white",
@@ -159,6 +153,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    justifyContent: 'center', // Center the content horizontally
+
   },
   addTaskInput: {
     flex: 1,
