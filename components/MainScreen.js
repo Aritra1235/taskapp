@@ -98,7 +98,8 @@ const MainScreen = ({ navigation }) => {
       {isAddingTask ? (
         <View style={styles.addTaskContainer}>
           <TextInput
-            style={[styles.addTaskInput, { color: theme.text.color, borderColor: theme.text.color }]}
+            style={[styles.addTaskInput, { color: theme.text.color, borderColor: theme.text.color,backgroundColor: 'grey' // Add this line
+          }]}
             value={newTaskText}
             onChangeText={setNewTaskText}
             placeholder="Enter task name"

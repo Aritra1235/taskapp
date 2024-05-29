@@ -66,7 +66,7 @@ const App = () => {
           <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
             <Stack.Navigator>
               <Stack.Screen
-                name="Main"
+                name="Home"
                 component={MainScreen}
                 options={({ navigation }) => ({
                   headerLeft: () => (

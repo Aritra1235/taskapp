@@ -2,6 +2,7 @@
   "expo": {
     "name": "taskapp",
     "slug": "taskapp",
+    "jsEngine": "hermes",
     "version": "1.0.0",
     "extra": {
       "eas": {
@@ -11,9 +12,9 @@
     "orientation": "portrait",
     "icon": "./res/logo.png",
     "splash": {
-      "image": "./res/OIG1.png",
+      "image": "./res/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#00132b"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
