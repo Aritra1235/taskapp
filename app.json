@@ -2,6 +2,27 @@
   "expo": {
     "name": "taskapp",
     "slug": "taskapp",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "fa6f1f10-7b8a-4c09-8976-ec4fa496e933"
+      }
+    },
+    "orientation": "portrait",
+    "icon": "./res/logo.png",
+    "splash": {
+      "image": "./res/OIG1.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.aritra.taskapp"
+    }
   }
 }
