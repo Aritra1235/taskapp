@@ -2,7 +2,6 @@
   "expo": {
     "name": "taskapp",
     "slug": "taskapp",
-    "jsEngine": "hermes",
     "version": "1.0.0",
     "extra": {
       "eas": {

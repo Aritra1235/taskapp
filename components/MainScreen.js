@@ -1,15 +1,28 @@
-import React, { useState, useEffect, useContext } from 'react';
+//MainScreen.js
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Task from './Task';
 import { ThemeContext } from './ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
+import { Animated } from 'react-native';
 
 const MainScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
   const [newTaskText, setNewTaskText] = useState('');
   const [isAddingTask, setIsAddingTask] = useState(false);
   const { isDarkMode, theme } = useContext(ThemeContext);
+  const [addButtonAnim] = useState(new Animated.Value(0)); // Initial value for opacity: 0
+
+//DOES NOT WORKING 
+
+  const animateAddButton = () => {
+    // Starts the animation
+    Animated.timing(addButtonAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true, // Add this line
+    }).start();
+  };
 
   useEffect(() => {
     loadTasks();
@@ -35,6 +48,7 @@ const MainScreen = ({ navigation }) => {
   };
 
   const addTask = () => {
+    animateAddButton();
     if (newTaskText.trim() === '') {
       Alert.alert('Error', 'Please enter a task name');
       return;
@@ -106,9 +120,23 @@ const MainScreen = ({ navigation }) => {
             placeholderTextColor={theme.text.color}
             autoFocus
           />
-          <TouchableOpacity style={styles.addButton} onPress={addTask}>
-            <Text style={styles.addButtonText}>Add</Text>
-          </TouchableOpacity>
+          <Animated.View
+            style={{
+              ...styles.addButton,
+              transform: [
+                {
+                  translateX: addButtonAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 100], // Change 100 to whatever distance you want the button to move
+                  }),
+                },
+              ],
+            }}
+          >
+            <TouchableOpacity onPress={addTask}>
+              <Text style={styles.addButtonText}>Add</Text>
+            </TouchableOpacity>
+          </Animated.View>
         </View>
       ) : (
         <TouchableOpacity style={styles.addButton} onPress={() => setIsAddingTask(true)}>
